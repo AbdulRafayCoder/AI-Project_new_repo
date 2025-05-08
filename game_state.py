@@ -14,3 +14,13 @@ class GameState:
         self.fight_result = input_dict['result']
         self.has_round_started = input_dict['round_started']
         self.is_round_over = input_dict['round_over']
+
+    def object_to_dict(self):
+        return {
+            "player1": self.player1.object_to_dict(),
+            "player2": self.player2.object_to_dict(),
+            "timer": self.timer,
+            "fight_result": self.fight_result,
+            "has_round_started": self.has_round_started,
+            "is_round_over": self.is_round_over
+        }

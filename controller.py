@@ -1,9 +1,9 @@
 import socket
 import json
-import sys  # Import sys to use sys.argv
+import sys
+from pynput import keyboard
 from game_state import GameState
 from bot import Bot
-from pynput import keyboard
 
 # Global variable to store the current key states
 key_states = {
@@ -11,64 +11,63 @@ key_states = {
     "down": False,
     "left": False,
     "right": False,
-    "W": False,
-    "E": False,
-    "A": False,
-    "S": False,
-    "Z": False,
-    "X": False
+    "Y": False,  # Light Punch (S)
+    "B": False,  # Light Kick (X)
+    "X": False,  # Medium Punch (A)
+    "A": False,  # Medium Kick (Z)
+    "L": False,  # Hard Punch (W)
+    "R": False   # Hard Kick (E)
 }
 
 def on_press(key):
     """Handle key press events."""
     try:
         if key.char == 'w':
-            key_states["W"] = True
+            key_states["L"] = True  # Hard Punch
         elif key.char == 'e':
-            key_states["E"] = True
+            key_states["R"] = True  # Hard Kick
         elif key.char == 'a':
-            key_states["A"] = True
-        elif key.char == 's':
-            print("S key pressed")  # Debug log
-            key_states["S"] = True
+            key_states["X"] = True  # Medium Punch
         elif key.char == 'z':
-            key_states["Z"] = True
+            key_states["A"] = True  # Medium Kick
+        elif key.char == 's':
+            key_states["Y"] = True  # Light Punch
         elif key.char == 'x':
-            key_states["X"] = True
+            key_states["B"] = True  # Light Kick
     except AttributeError:
         if key == keyboard.Key.up:
-            key_states["up"] = True
+            key_states["up"] = True  # Move Up (Jump)
         elif key == keyboard.Key.down:
-            key_states["down"] = True
+            key_states["down"] = True  # Move Down (Crouch)
         elif key == keyboard.Key.left:
-            key_states["left"] = True
+            key_states["left"] = True  # Move Left
         elif key == keyboard.Key.right:
-            key_states["right"] = True
+            key_states["right"] = True  # Move Right
 
 def on_release(key):
     """Handle key release events."""
     try:
         if key.char == 'w':
-            key_states["W"] = False
+            key_states["L"] = False  # Hard Punch
         elif key.char == 'e':
-            key_states["E"] = False
+            key_states["R"] = False  # Hard Kick
         elif key.char == 'a':
-            key_states["A"] = False
-        elif key.char == 's':
-            key_states["S"] = False
+            key_states["X"] = False  # Medium Punch
         elif key.char == 'z':
-            key_states["Z"] = False
+            key_states["A"] = False  # Medium Kick
+        elif key.char == 's':
+            key_states["Y"] = False  # Light Punch
         elif key.char == 'x':
-            key_states["X"] = False
+            key_states["B"] = False  # Light Kick
     except AttributeError:
         if key == keyboard.Key.up:
-            key_states["up"] = False
+            key_states["up"] = False  # Move Up (Jump)
         elif key == keyboard.Key.down:
-            key_states["down"] = False
+            key_states["down"] = False  # Move Down (Crouch)
         elif key == keyboard.Key.left:
-            key_states["left"] = False
+            key_states["left"] = False  # Move Left
         elif key == keyboard.Key.right:
-            key_states["right"] = False
+            key_states["right"] = False  # Move Right
 
 def connect(port):
     """For making a connection with the game."""
@@ -94,27 +93,16 @@ def receive(client_socket):
 
 def map_keys_to_buttons(bot_command):
     """Map the current key states to the bot's button commands."""
-    # Movement keys
     bot_command.player_buttons.up = key_states["up"]
     bot_command.player_buttons.down = key_states["down"]
     bot_command.player_buttons.left = key_states["left"]
     bot_command.player_buttons.right = key_states["right"]
-
-    # Action keys
-    bot_command.player_buttons.Y = key_states["S"]  # Light punch
-    bot_command.player_buttons.B = key_states["X"]  # Light kick
-    bot_command.player_buttons.X = key_states["A"]  # Medium punch
-    bot_command.player_buttons.A = key_states["Z"]  # Medium kick
-    bot_command.player_buttons.L = key_states["W"]  # Hard punch
-    bot_command.player_buttons.R = key_states["E"]  # Hard kick
-
-    # Log active moves to the console
-    active_moves = []
-    for key, state in key_states.items():
-        if state:
-            active_moves.append(key)
-    if active_moves:
-        print(f"Active moves: {', '.join(active_moves)}")
+    bot_command.player_buttons.Y = key_states["Y"]  # Light Punch
+    bot_command.player_buttons.B = key_states["B"]  # Light Kick
+    bot_command.player_buttons.X = key_states["X"]  # Medium Punch
+    bot_command.player_buttons.A = key_states["A"]  # Medium Kick
+    bot_command.player_buttons.L = key_states["L"]  # Hard Punch
+    bot_command.player_buttons.R = key_states["R"]  # Hard Kick
 
 def main():
     if sys.argv[1] == '1':
