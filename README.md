@@ -83,17 +83,17 @@ The model we have used is Random Forest Classifier. It predicts the next set of 
 
 **Libraries**
 
-![image](https://github.com/user-attachments/assets/451ce106-ac65-4c07-b2bc-c8ad2a6f95b6)
+![image](https://github.com/user-attachments/assets/b726e75d-51b2-47e5-9f10-5ae349349208)
 
 
 **Data Pre-processing**
 
-![image](https://github.com/user-attachments/assets/7a7e11b8-01d1-4461-a775-53c5131159e5)
+![image](https://github.com/user-attachments/assets/e17d6317-347b-44d0-9923-5772f106c3ec)
 
 
 **Prediction Logic**
 
-![image](https://github.com/user-attachments/assets/85205941-2709-4c2f-8b85-70c3e30fdb7c)
+![image](https://github.com/user-attachments/assets/dd33169d-9f29-4a0c-a2ce-4338ff2ecea3)
 
 
 
