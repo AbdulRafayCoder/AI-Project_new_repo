@@ -1,5 +1,4 @@
-![image](https://github.com/user-attachments/assets/7b6fe5c0-69f6-4cd0-8738-6e2516f9dec8)**ARTIFICIAL INTELLIGENCE FINAL PROJECT**
-
+**ARTIFICIAL INTELLIGENCE FINAL PROJECT**
 
 
 **WORKING OF THE GAME:** 
