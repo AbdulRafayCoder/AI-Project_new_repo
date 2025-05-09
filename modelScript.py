@@ -1,75 +1,56 @@
 import pandas as pd
-import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.multioutput import MultiOutputClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
+from sklearn.metrics import classification_report, accuracy_score
+import joblib
 
-# Load the data
-csv_file_path = r"/kaggle/input/street-fighter2/abuzar_data.csv"
-data = pd.read_csv(csv_file_path)
+df = pd.read_csv("trainData3.csv")
 
-# Map move_id to individual move columns
-move_mapping = {
-    0: "Idle",
-    1: "Light_Punch",
-    2: "Light_Kick",
-    3: "Medium_Punch",
-    4: "Medium_Kick",
-    5: "Hard_Punch",
-    6: "Hard_Kick",
-    7: "Special_Move"
-}
+# Compute required features
+df["health_difference"] = df["Player1_health"] - df["Player2_health"]
+df["distance_x"] = df["Player2_x"] - df["Player1_x"]
+df["distance_y"] = df["Player2_y"] - df["Player1_y"]
 
-# Add columns for each move
-for move_id, move_name in move_mapping.items():
-    data[move_name] = (data["move_id"] == move_id).astype(int)
+# Select only required input features
+input_features = [
+    "Player1_ID",
+    "Player2_ID",
+    "health_difference",
+    "Player2_up", "Player2_down", "Player2_right", "Player2_left",
+    "Player2_Y", "Player2_B", "Player2_X", "Player2_A", "Player2_L", "Player2_R",
+    "distance_x", "distance_y"
+]
 
-# Preprocess the data
-# Select input features (X)
-X = data[[
-    "timer", "health", "x_coord", "y_coord", "is_jumping", "is_crouching",
-    "is_player_in_move", "player1_buttons up", "player1_buttons down",
-    "player1_buttons right", "player1_buttons left"
-]]
+# Ensure inputs are integers
+df[input_features] = df[input_features].astype(int)
 
-# Select target labels (y) including directional and move columns
-y = data[[
-    "player1_buttons up", "player1_buttons down", "player1_buttons right", "player1_buttons left",
-    "Light_Punch", "Light_Kick", "Medium_Punch", "Medium_Kick", "Hard_Punch", "Hard_Kick", "Special_Move"
-]]
+# Output labels (multi-label classification)
+output_labels = [
+    "Player1_up", "Player1_down", "Player1_right", "Player1_left",
+    "Player1_Y", "Player1_B", "Player1_X", "Player1_A", "Player1_L", "Player1_R"
+]
 
-# Convert boolean values in y to integers
-y = y.astype(int)
+df[output_labels] = df[output_labels].astype(int)
 
-# Normalize the input features
-scaler = StandardScaler()
-X = scaler.fit_transform(X)
-
-# Convert target labels to numpy array
-y = y.values
-
-# Split the data into training and testing sets
+# Split dataset
+X = df[input_features]
+y = df[output_labels]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Build the deep learning model
-model = Sequential([
-    Dense(128, activation='relu', input_shape=(X_train.shape[1],)),
-    Dropout(0.3),
-    Dense(64, activation='relu'),
-    Dropout(0.3),
-    Dense(y_train.shape[1], activation='sigmoid')  # Sigmoid for multi-label classification
-])
+# Train model
+base_model = RandomForestClassifier(n_estimators=100, random_state=42)
+multi_model = MultiOutputClassifier(base_model)
+multi_model.fit(X_train, y_train)
 
-# Compile the model
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+# Evaluate
+y_pred = multi_model.predict(X_test)
+print(classification_report(y_test, y_pred, zero_division=0))
 
-# Train the model
-history = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_split=0.2)
+# Exact match accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print(f"✅ Exact Match Accuracy: {accuracy:.4f}")
 
-# Evaluate the model
-loss, accuracy = model.evaluate(X_test, y_test)
-print(f"Test Accuracy: {accuracy * 100:.2f}%")
-
-# Save the model
-model.save("ai_agent_model_with_moves.h5")
+# Save model
+joblib.dump(multi_model, "street_fighter_model3.pkl")
+print("📦 Model saved as 'street_fighter_model3.pkl'")
