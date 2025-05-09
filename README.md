@@ -1,4 +1,4 @@
-**ARTIFICIAL INTELLIGENCE FINAL PROJECT**
+![image](https://github.com/user-attachments/assets/7b6fe5c0-69f6-4cd0-8738-6e2516f9dec8)**ARTIFICIAL INTELLIGENCE FINAL PROJECT**
 
 
 
@@ -42,6 +42,10 @@ After the hit and trial method and finding the perfect labels, we generated exte
 We generated the data using pynput library, recording each action of the user. The reason for playing the game ourselves was to generate better quality data. If the functionality of bot.py file was used, 
 then we would have gotten random data with no cohesion or logic. So we played the game ourselves so that the bot will mimic human behaviour and preferably win games(which it is winning). 
 
+![image](https://github.com/user-attachments/assets/0cb43811-beeb-44a1-872d-a17a3749c2fb)
+
+
+
 **CODE OF USER INPUT**
 
 
@@ -77,3 +81,23 @@ The model we have used is Random Forest Classifier. It predicts the next set of 
 **Model:** A RandomForestClassifier wrapped in MultiOutputClassifier is used to handle multiple action predictions at once.
 
 **Evaluation:** The model's performance is measured using classification metrics and exact match accuracy (how often the entire predicted set matches the actual actions)
+
+**Libraries**
+
+![image](https://github.com/user-attachments/assets/451ce106-ac65-4c07-b2bc-c8ad2a6f95b6)
+
+
+**Data Pre-processing**
+
+![image](https://github.com/user-attachments/assets/7a7e11b8-01d1-4461-a775-53c5131159e5)
+
+
+**Prediction Logic**
+
+![image](https://github.com/user-attachments/assets/85205941-2709-4c2f-8b85-70c3e30fdb7c)
+
+
+
+**CONCLUSION**
+
+All of our group members agree on the fact that this project was really helpful in learning the pre-requisites of any model. This project will prove to be our basis for further ML and AI courses. In the end, we have successfully developed a model that predicts moves, performs logical actions and wins games often. We are proud of our work and hope that this project learning will be the stepping stone for next projects. 
